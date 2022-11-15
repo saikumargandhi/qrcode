@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 pt-5 pb-3 mb-3 col-sm-6">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="text-center">Update Student Record</h4>
+        </div>
+        <div class="card-body">
+            <form action="{{url_for('update_student')}}" method="post">
+                <div class="form-group">
+                    <input type="text" hidden name="stu_id" value="{{data['student_data'][0]}}">
+                    <label for="username">Student Name</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-user"
+                                    aria-hidden="true"></i></span> </div>
+                        <input name="username" value="{{data['student_data'][1]}}" autocomplete="off"
+                            class="form-control" type="text" id="username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signmail">Student Email Address</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-at"
+                                    aria-hidden="true"></i></span> </div>
+                        <input name="signmail" autocomplete="off" class="form-control" placeholder="username@gmail.com"
+                            type="email" value="{{data['student_data'][2]}}" id="signmail" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mobile">Student Mobile Number</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-mobile-alt"
+                                    aria-hidden="true"></i></span> </div>
+                        <input name="mobile" autocomplete="off" class="form-control" placeholder="9999999999"
+                            pattern="[0-9]{10}" value="{{data['student_data'][5]}}" maxlength="10" type="tel"
+                            id="mobile" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="year">Year of Study</label>
+                    <select class="form-control" id="year" name="year" required>
+                        <option value=""> --- Select Year --- </option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="branch">Branch</label>
+                    <select class="form-control" id="branch" name="branch" required>
+                        <option value=""> --- Select Branch --- </option>
+                        <option value="CSE">CSE</option>
+                        <option value="ECE">ECE</option>
+                        <option value="IT">IT</option>
+                        <option value="EEE">EEE</option>
+                        <option value="CIVIL">CIVIL</option>
+                        <option value="MECH">MECH</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Student Gender </label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value=""> --- Select Gender --- </option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <button type="submit" id="myBtn" class="btn btn-success">Update Student</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script>
+document.getElementById("year").value = "{{data['student_data'][7]}}";
+document.getElementById("branch").value = "{{data['student_data'][8]}}";
+document.getElementById("gender").value = "{{data['student_data'][3]}}";
+</script>
+{% endblock %}

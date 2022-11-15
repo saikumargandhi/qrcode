@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <title>{{data['title']}}</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <link rel="icon" type="image/png" href="{{url_for('static', filename='flask_logo.png')}}" />
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+   <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin="" />
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""></script>
+</head>
+
+<body id="page-top">
+   <!-- Navigation-->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top py-3" id="mainNav1">
+      <div class="container">
+         <a class="navbar-brand" href="/">
+            <h4>Bridgewater State University</h4>
+         </a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"><span
+               class="navbar-toggler-icon"></span></button>
+         <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto my-2 my-lg-0">
+               <li class="nav-item"><a class="nav-link " href="{{url_for('index')}}">Home</a></li>
+               {% if session["userid"] and session["role"]==0 %}
+               <li class="nav-item"><a class="nav-link " href="{{url_for('dashboard')}}">Dashboard</a></li>
+               <li class="nav-item"><a class="nav-link " href="{{url_for('logout')}}">Logout</a></li>
+               {% elif session["userid"] and session["role"]== 1 %}
+               <li class="nav-item"><a class="nav-link " href="{{url_for('stu_dashboard')}}">Dashboard</a></li>
+               <li class="nav-item"><a class="nav-link " href="{{url_for('logout')}}">Logout</a></li>
+               {% else %}
+               <li class="nav-item"><a class="nav-link " href="#!" data-backdrop="static" data-toggle="modal"
+                     data-target="#loginmodal">Login</a></li>
+               {% endif %}
+               <!--<li class="nav-item"><a class="nav-link" href="#!">About us</a></li>-->
+               <li class="nav-item"><a class="nav-link " href="{{url_for('contactus')}}">Contact us</a></li>
+            </ul>
+         </div>
+      </div>
+   </nav>
+   <br>
+   <!-- <div class="container pt-2 mt-2"> -->
+   {% block content %}
+   {% endblock %}
+   <!-- </div> -->
+   <!-- The Modal -->
+   <div class="modal fade" id="loginmodal">
+      <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+               <h4 class="modal-title">Login Form</h4>
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+               <form action="{{url_for('login')}}" method="post">
+                  <div class="form-group">
+                     <label for="usermail">Enter Email Address</label>
+                     <div class="input-group mb-3">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-at"
+                                 aria-hidden="true"></i></span> </div>
+                        <input name="usermail" class="form-control" placeholder="username@gmail.com" type="email"
+                           id="usermail" required>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label for="password">Enter Password</label>
+                     <div class="input-group mb-3">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-key"
+                                 aria-hidden="true"></i></span> </div>
+                        <input name="password" class="form-control" type="password" id="password" required>
+                     </div>
+                  </div>
+                  <!--<button type="submit" class="btn btn-success mr-2">Login</button>-->
+                  <!--<a href="forgotpassword.php">Forgot Password ?</a> -->
+
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+               <div class="mr-auto">
+                  <!--<script async src="https://telegram.org/js/telegram-widget.js?11" data-telegram-login="buyprojects_bot" data-size="large" data-auth-url="http://www.buyprojects.tech/telegram.php" data-request-access="write"></script>-->
+                  <button type="submit" class="btn btn-success mr-2">Login</button>
+                  <a href="#!">Forgot Password ?</a>
+               </div>
+            </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</body>
+
+</html>

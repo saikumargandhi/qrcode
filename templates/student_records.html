@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 pt-5 mb-3 pb-3">
+    <div class="table-responsive">
+        <table class="table table-borderless table-hover">
+            <thead class="text-info">
+                <tr>
+                    <th>SI.No</th>
+                    <th>Student Name</th>
+                    <th>Branch</th>
+                    <th>Year</th>
+                    <th>Mobile</th>
+                    <th>Mail</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for x in range(students_data|length): %}
+                {% if data['msg_code']==200 %}
+                <tr>
+                    <td>{{x+1}})</td>
+                    <td>{{students_data[x][1]}}</td>
+                    <td>{{students_data[x][8]}}</td>
+                    <td>{{students_data[x][7]}}</td>
+                    <td>{{students_data[x][5]}}</td>
+                    <td>{{students_data[x][2]}}</td>
+                    <td class="text-center"><a
+                            href="{{ url_for('edit_student',action='edit',student_id=students_data[x][0]) }}"><i
+                                class="fas text-success fa-lg fa-pencil-alt"></i></a></td>
+                    <td class="text-center"><a
+                            href="{{ url_for('edit_student',action='delete',student_id=students_data[x][0]) }}"><i
+                                class=" fas text-danger fa-lg fa-trash-alt"></i></a></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container col-sm-6 pt-5 mt-5 mb-5 mx-auto">
+    <div class="card">
+        <div class="card-body">
+            <p class="text-center">
+                <a href="#!">
+                    <img src="{{url_for('static',filename = images/1.jpeg)}}" class="rounded-circle border"
+                        alt="profilepic" width="100px" height="100px" id="profilepic" class="card-title"></a>
+            </p>
+            <form action="{{url_for('updateprofile')}}" method="post">
+                <div class="form-group">
+                    <label for="profilename">Your Name</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-user"
+                                    aria-hidden="true"></i></span> </div>
+                        <input name="profilename" class="form-control" value="{{userdata[1]}}" type="text"
+                            id="profilename" readonly required>
+                        <div class="input-group-append">
+                            <button type="button" onclick="enable('name')" onfocus="this.value = this.value;"
+                                class="btn btn-primary"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="profilemail">Your Email Address</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-at"
+                                    aria-hidden="true"></i></span> </div>
+                        <input name="profilemail" class="form-control" value="{{userdata[2]}}"
+                            placeholder="username@gmail.com" type="email" id="profilemail" readonly required>
+                        <div class="input-group-append">
+                            <button type="button" onclick="enable('mail')" onfocus="this.value = this.value;"
+                                class="btn btn-primary"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="profilemobile">Your Mobile Number</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-mobile-alt"
+                                    aria-hidden="true"></i></span> </div>
+                        <input name="profilemobile" class="form-control" value="{{userdata[5]}}"
+                            placeholder="9999999999" pattern="[0-9]{10}" maxlength="10" type="tel" id="profilemobile"
+                            readonly required>
+                        <div class="input-group-append">
+                            <button type="button" onclick="enable('mobile')" class="btn btn-primary"><i
+                                    class="fas fa-pencil-alt" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success mr-2">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // function to enable the input filed based on the user click on respective edit symbol on input field
+    function enable(target) {
+        if (target == "name") {
+            document.getElementById("profilename").readOnly = false;
+            document.getElementById("profilename").focus();
+        }
+        else if (target == "mobile") {
+            document.getElementById("profilemobile").readOnly = false;
+            document.getElementById("profilemobile").focus();
+        }
+        else if (target == "mail") {
+            document.getElementById("profilemail").readOnly = false;
+            document.getElementById("profilemail").focus();
+        }
+    }
+
+    //   javascript fcunction to place marker at end of the input field info
+
+    $('#profilename').focus(function () {
+        var that = this;
+        setTimeout(function () { that.selectionStart = that.selectionEnd = 10000; }, 0);
+    });
+    $('#profilemobile').focus(function () {
+        var that = this;
+        setTimeout(function () { that.selectionStart = that.selectionEnd = 10000; }, 0);
+    });
+    $('#profilemail').focus(function () {
+        var that = this;
+        //   setTimeout(function(){ that.selectionStart = that.selectionEnd = 10000; }, 0);
+    });
+</script>
+{% endblock %}

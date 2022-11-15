@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container col-sm-10 mx-auto mt-3 pt-3">
+  <div class="card-columns mt-5 pt-5">
+    <div class="card bg-info">
+      <div class="card-body text-center">
+        <a href="{{url_for('download_id_card')}}" class="stretched-link btn btn-info">Download ID Card</a>
+      </div>
+    </div>
+    <div class="card bg-info">
+      <div class="card-body text-center">
+        <a href="{{url_for('download_bonafide_card')}}" class="stretched-link btn btn-info">Download Bonafide
+          Certificate</a>
+      </div>
+    </div>
+    <div class="card bg-info">
+      <div class="card-body text-center">
+        <a href="#" class="stretched-link btn btn-info">Edit Profile</a>
+      </div>
+    </div>
+    <div class="card bg-info">
+      <div class="card-body text-center">
+        <button type="button" class="stretched-link btn btn-info" data-backdrop="static" data-toggle="modal"
+          data-target="#pwdmodal">Change Password</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- change password form -->
+<!-- The Modal -->
+<div class="modal fade" id="pwdmodal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Change Password</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form action="{{url_for('change_password')}}" method="post">
+          <input type="text" name="from_which" value="stu_dashboard" hidden>
+          <div class="form-group">
+            <label for="userpassword">Enter Password</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-key"
+                    aria-hidden="true"></i></span> </div>
+              <input name="userpassword" autocomplete="off" class="form-control" type="password" id="userpassword"
+                required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="repassword">Re-Enter Password</label> <img
+              src="{{url_for('static',filename='icons8-verified-account-24.png')}}" alt="match icon"
+              class="d-inline invisible" id="matchicon">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-key"
+                    aria-hidden="true"></i></span> </div>
+              <input name="repassword" autocomplete="off" class="form-control" type="password" id="repassword"
+                onkeyup="matching()" required>
+            </div>
+          </div>
+          <button type="submit" id="myBtn" class="btn btn-success" disabled>Change Password</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- change pwd modal form ends -->
+<script>
+  function matching() {
+    var x = document.getElementById("userpassword").value;
+    var y = document.getElementById("repassword").value;
+    var z = document.getElementById("matchicon");
+    if (x == y) {
+      z.className = "visible";
+      document.getElementById("myBtn").disabled = false;
+    } else {
+      z.className = "invisible";
+      document.getElementById("myBtn").disabled = true;
+    }
+  }
+</script>
+{% endblock %}

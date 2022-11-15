@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!--Home page , with a container of nav pill tabs of about matrix college and website info.-->
+<div class="container pt-2 mt-2 mb-2 mx-auto">
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#notice">Notice Board</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#exams">Examinations Time Table</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#syllabus">Syllabus</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#bonafide">Generate Bonafide Certificate</a>
+    </li>
+  </ul>
+  <!-- Tab panes -->
+  <div class="tab-content mb-4 pb-4">
+    <!--this tab pane is for notice board info-->
+    <div id="notice" class=" tab-pane active">
+      <div class="card mt-4">
+        <div class="card-body">
+          <p>Notice Board for the College</p>
+        </div>
+      </div>
+    </div>
+    <!--this nav tab pane is for exam time table info-->
+    <div id="exams" class=" tab-pane fade">
+      <div class="card mt-4">
+        <div class="card-body">
+          <p>Examinations Time Table</p>
+        </div>
+      </div>
+    </div>
+    <!--this tab pane is for syllabus info-->
+    <div id="syllabus" class=" tab-pane fade">
+      <div class="card mt-4">
+        <div class="card-body">
+          <p>All Branches Syllabus Info</p>
+        </div>
+      </div>
+    </div>
+    <!--this tab pane is for bonafide certificate info-->
+    <div id="bonafide" class=" tab-pane fade">
+      <div class="card mt-4">
+        <div class="card-body">
+          <p>Generate Bonafide Certificate here</p>
+        </div>
+      </div>
+    </div>
+    <!--Done for all Nav Panes-->
+  </div>
+  <!--Nav Complete-->
+</div>
+<!--Nav container close-->
+<!--OSM Map-->
+<div class="container mt-2 pt-2 mb-4 pb-2">
+  <div id="mapid" style="height:350px;"></div>
+</div>
+<!--Map Close-->
+<script>
+  var mymap = L.map('mapid').setView([41.988870194361375, -70.9661922116155], 14.5);
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidGVzdGZvcmt1Y2V0IiwiYSI6ImNranZxc3c1bTBhenUydmw3YnN4bWQ1Mm8ifQ.ylS8DA-7s2WQCDglp9TFRg', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v8',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoidGVzdGZvcmt1Y2V0IiwiYSI6ImNranZxc3c1bTBhenUydmw3YnN4bWQ1Mm8ifQ.ylS8DA-7s2WQCDglp9TFRg'
+  }).addTo(mymap);
+  var marker = L.marker([41.988870194361375, -70.9661922116155]).addTo(mymap);
+  marker.bindPopup("<b>Bridgewater State University is Here</b>").openPopup();
+
+</script>
+{% endblock %}

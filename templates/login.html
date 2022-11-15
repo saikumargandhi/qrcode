@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="modal fade" id="redirect" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>{{data['msg']}}.<br>You will be redirected to the Home page in few seconds.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% if data['msg_code'] == 200 and session["role"] == 0 %}
+<script>
+    $(document).ready(function () {
+        $("#redirect").modal();
+    });
+    setTimeout(function () { window.location.href = "{{url_for('dashboard')}}"; }, 2500);
+</script>
+{% elif data['msg_code'] == 200 and session["role"] == 1 %}
+<script>
+    $(document).ready(function () {
+        $("#redirect").modal();
+    });
+    setTimeout(function () { window.location.href = "{{url_for('stu_dashboard')}}"; }, 2500);
+</script>
+{% elif data['msg_code'] == 400 or data['msg_code'] == 404 %}
+<script>
+    $(document).ready(function () {
+        $("#redirect").modal();
+    });
+    setTimeout(function () { window.location.href = "{{url_for('index')}}"; }, 2500);
+</script>
+{% endif %}
+{% endblock %}
