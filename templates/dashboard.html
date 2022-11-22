@@ -144,21 +144,21 @@
                      <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-key"
                               aria-hidden="true"></i></span> </div>
                      <input name="userpassword" autocomplete="off" class="form-control" type="password"
-                        id="userpassword" required>
+                        id="stu_userpassword" required>
                   </div>
                </div>
                <div class="form-group">
                   <label for="repassword">Re-Enter Password</label> <img
                      src="{{url_for('static',filename='icons8-verified-account-24.png')}}" alt="match icon"
-                     class="d-inline invisible" id="matchicon">
+                     class="d-inline invisible" id="stu_matchicon">
                   <div class="input-group mb-3">
                      <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-key"
                               aria-hidden="true"></i></span> </div>
-                     <input name="repassword" autocomplete="off" class="form-control" type="password" id="repassword"
-                        onkeyup="matching()" required>
+                     <input name="repassword" autocomplete="off" class="form-control" type="password" id="stu_repassword"
+                        onkeyup="stu_matching()" required>
                   </div>
                </div>
-               <button type="submit" id="myBtn" class="btn btn-success" disabled>Add Student</button>
+               <button type="submit" id="stu_myBtn" class="btn btn-success" disabled>Add Student</button>
             </form>
          </div>
          <div class="modal-footer">
@@ -179,6 +179,18 @@
       } else {
          z.className = "invisible";
          document.getElementById("myBtn").disabled = true;
+      }
+   }
+   function stu_matching() {
+      var x = document.getElementById("stu_userpassword").value;
+      var y = document.getElementById("stu_repassword").value;
+      var z = document.getElementById("stu_matchicon");
+      if (x == y) {
+         z.className = "visible";
+         document.getElementById("stu_myBtn").disabled = false;
+      } else {
+         z.className = "invisible";
+         document.getElementById("stu_myBtn").disabled = true;
       }
    }
 </script>
