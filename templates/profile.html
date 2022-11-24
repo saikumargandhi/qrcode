@@ -5,16 +5,16 @@
         <div class="card-body">
             <p class="text-center">
                 <a href="#!">
-                    <img src="{{url_for('static',filename = images/1.jpeg)}}" class="rounded-circle border"
+                    <img src="{{url_for('static',filename = '/icons/m1.png')}}" class="rounded-circle border"
                         alt="profilepic" width="100px" height="100px" id="profilepic" class="card-title"></a>
             </p>
-            <form action="{{url_for('updateprofile')}}" method="post">
+            <form action="{{url_for('update_profile')}}" method="post">
                 <div class="form-group">
                     <label for="profilename">Your Name</label>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-user"
                                     aria-hidden="true"></i></span> </div>
-                        <input name="profilename" class="form-control" value="{{userdata[1]}}" type="text"
+                        <input name="profilename" class="form-control" value="{{data['user_name']}}" type="text"
                             id="profilename" readonly required>
                         <div class="input-group-append">
                             <button type="button" onclick="enable('name')" onfocus="this.value = this.value;"
@@ -27,7 +27,7 @@
                     <div class="input-group mb-3">
                         <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-at"
                                     aria-hidden="true"></i></span> </div>
-                        <input name="profilemail" class="form-control" value="{{userdata[2]}}"
+                        <input name="profilemail" class="form-control" value="{{data['user_mail']}}"
                             placeholder="username@gmail.com" type="email" id="profilemail" readonly required>
                         <div class="input-group-append">
                             <button type="button" onclick="enable('mail')" onfocus="this.value = this.value;"
@@ -40,7 +40,7 @@
                     <div class="input-group mb-3">
                         <div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-mobile-alt"
                                     aria-hidden="true"></i></span> </div>
-                        <input name="profilemobile" class="form-control" value="{{userdata[5]}}"
+                        <input name="profilemobile" class="form-control" value="{{data['user_mob']}}"
                             placeholder="9999999999" pattern="[0-9]{10}" maxlength="10" type="tel" id="profilemobile"
                             readonly required>
                         <div class="input-group-append">

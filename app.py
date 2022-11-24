@@ -10,6 +10,8 @@ import webbrowser
 import os
 import qrcode
 from datetime import datetime
+import smtplib
+import ssl
 
 # setting up flask session
 global msg
@@ -17,6 +19,12 @@ app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+# smtp credentials
+smtp_server = "smtp.hostinger.com"
+port = 587  # For starttls
+sender_email = "help@qrproject.tech"
+password = "Helpqr@48"
 
 # flask route used to go to index or home page
 
@@ -232,10 +240,41 @@ def register():
                     cur.execute("INSERT INTO users(name,mail,mobile,pwd,gender,role,year,branch)VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
                                 (username, usermail, mobile, userpwd, gender, role, year, branch))
                     con.commit()
+                    cur.execute(
+                        "select id from users where mail=:who", {"who": usermail})
+                    rows = cur.fetchone()
+                    if(rows):
+                        stu_id = rows[0]
+                        message = """From:UMHB Admin <help@qrproject.tech>
+To: me
+MIME-Version: 1.0
+Content-type: text/html
+Subject: Account Created in UMHB
+
+An account has been created by UMHB Admin for you.<br><br>Your student id is """+str(stu_id)+""", and your password is '"""+request.form['userpassword']+"""'.<br><br>Userid and Password are confidential.<br><br>Regards,<br><br>UMHB Admin,<br><br>help@qrproject.tech
+"""
+                        # Create a secure SSL context
+                        context = ssl.create_default_context()
+                        # Try to log in to server and send email
+                        try:
+                            server = smtplib.SMTP(smtp_server, port)
+                            server.ehlo()  # Can be omitted
+                            # Secure the connection
+                            server.starttls(context=context)
+                            server.ehlo()  # Can be omitted
+                            server.login(sender_email, password)
+                            server.sendmail(
+                                sender_email, usermail, message)
+                        except Exception as e:
+                            # Print any error messages to stdout
+                            print(e)
+                        finally:
+                            server.quit()
                     msg = 'Registered Successfully.'
 
-        except:
+        except Exception as e:
             con.rollback()
+            print(e)
             msg = "Error in connecting to database"
         # pass the flask variable to page to show message to user
         finally:
@@ -319,6 +358,54 @@ def stu_dashboard():
         'title': title,
     }
     return render_template("stu_dashboard.html", data=data)
+
+
+# update profile
+@app.route("/update_profile", methods=["POST"])
+def update_profile():
+    title = "Updating Profile"
+    data = {
+        'title': title,
+    }
+    try:
+        username = request.form['profilename']
+        usermail = request.form['profilemail']
+        usermob = request.form['profilemobile']
+        with sqlite3.connect("database.db") as con:
+            cur = con.cursor()
+            userid = session["userid"]
+            cur.execute(
+                "update users set mail=?,name=?,mobile=? where id=?", (usermail, username,usermob,userid))
+            con.commit()
+        con.close()
+        msg = "Profile Updated Successfully"
+    except Exception as e:
+        msg = e
+    data["msg"] = msg
+    print(data)
+    return render_template("updateprofile.html", data=data)
+
+# flask route to invoke profile page
+
+
+@app.route("/my_profile")
+def my_profile():
+    title = "My Profile Page"
+    data = {
+        'title': title,
+    }
+    with sqlite3.connect("database.db") as con:
+        cur = con.cursor()
+        userid = session["userid"]
+        cur.execute("select * from users where id="+str(userid))
+        rows = cur.fetchall()
+        data["user_name"] = rows[0][1]
+        data["user_mail"] = rows[0][2]
+        data["user_mob"] = rows[0][5]
+    con.close()
+    print(data)
+    return render_template("profile.html", data=data)
+
 
 # download id card
 
