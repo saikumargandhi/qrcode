@@ -251,7 +251,7 @@ MIME-Version: 1.0
 Content-type: text/html
 Subject: Account Created in BSU
 
-An account has been created by BSU Admin for you.<br><br>Your student id is """+str(stu_id)+""", login mail id is """+usermail+""" and your password is '"""+request.form['userpassword']+"""'.<br><br>Userid and Password are confidential.<br><br>Regards,<br><br>BSU Admin,<br><br>help@qrproject.tech
+An account has been created by BSU Admin for you.<br><br>Your student id is """+str(stu_id)+""", login mail id is """+usermail+""" and your password is '"""+request.form['userpassword']+"""'.<br><br>You can login into you account by using <a href="https://qrcode-flask.herokuapp.com/" target="_blank">this link</a>.<br><br>Userid and Password are confidential.<br><br>Regards,<br><br>BSU Admin,<br><br>help@qrproject.tech
 """
                         # Create a secure SSL context
                         context = ssl.create_default_context()
@@ -375,7 +375,7 @@ def update_profile():
             cur = con.cursor()
             userid = session["userid"]
             cur.execute(
-                "update users set mail=?,name=?,mobile=? where id=?", (usermail, username,usermob,userid))
+                "update users set mail=?,name=?,mobile=? where id=?", (usermail, username, usermob, userid))
             con.commit()
         con.close()
         msg = "Profile Updated Successfully"
