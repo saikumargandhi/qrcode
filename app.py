@@ -424,7 +424,7 @@ def download_id_card():
         if(rows):
             if(rows[0][6] == 1):
                 path = "./static/idcards/"
-                qrcode.make('https://qrcodeflask.herokuapp.com/validate/' +
+                qrcode.make('https://qrcode-flask.herokuapp.com/validate/' +
                             str(userid)+"/").save(path + rows[0][1]+".png")
                 pdf = FPDF('P', 'mm', 'A4')
                 pdf.add_page()
@@ -506,7 +506,7 @@ def download_bonafide_card():
         if(rows):
             if(rows[0][6] == 1):
                 path = "./static/idcards/"
-                qrcode.make('https://qrcodeflask.herokuapp.com/validate/' +
+                qrcode.make('https://qrcode-flask.herokuapp.com/validate/' +
                             str(userid)+"/").save(path + rows[0][1]+".png")
                 pdf = FPDF('P', 'mm', 'A4')
                 pdf.add_page()
