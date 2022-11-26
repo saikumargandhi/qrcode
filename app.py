@@ -245,13 +245,13 @@ def register():
                     rows = cur.fetchone()
                     if(rows):
                         stu_id = rows[0]
-                        message = """From:UMHB Admin <help@qrproject.tech>
+                        message = """From:BSU Admin <help@qrproject.tech>
 To: me
 MIME-Version: 1.0
 Content-type: text/html
-Subject: Account Created in UMHB
+Subject: Account Created in BSU
 
-An account has been created by UMHB Admin for you.<br><br>Your student id is """+str(stu_id)+""", and your password is '"""+request.form['userpassword']+"""'.<br><br>Userid and Password are confidential.<br><br>Regards,<br><br>UMHB Admin,<br><br>help@qrproject.tech
+An account has been created by BSU Admin for you.<br><br>Your student id is """+str(stu_id)+""", login mail id is """+usermail+""" and your password is '"""+request.form['userpassword']+"""'.<br><br>Userid and Password are confidential.<br><br>Regards,<br><br>BSU Admin,<br><br>help@qrproject.tech
 """
                         # Create a secure SSL context
                         context = ssl.create_default_context()
