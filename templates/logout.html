@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="container mx-auto m-5 p-5">
+    <h4>
+        <p>{{data['msg']}}.<br>You will be redirected to the Home page in few seconds.</p>
+    </h4>
+</div>
 <div class="modal fade" id="redirect" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content text-dark">
             <div class="modal-body">
                 <p>{{data['msg']}}.<br>You will be redirected to the Home page in few seconds.</p>
             </div>

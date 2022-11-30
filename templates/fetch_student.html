@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+{% if(data["msg_code"]=="ok" and session["role"]==0) %}
+<div class="container pt-3 mt-3">
+    <div class="card">
+        <div class="card-header text-center">
+            <h5>Student Information fetched from ID Card - QR Code</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-borderless table-hover">
+                <tbody class="text-center">
+                    <tr>
+                        <td>ID</td>
+                        <td>{{data["student_data"][0][0]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{data["student_data"][0][1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>{{data["student_data"][0][3]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Year of Study</td>
+                        <td>{{data["student_data"][0][7]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Branch</td>
+                        <td>{{data["student_data"][0][8]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Available Books</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless table-hover">
+                        <thead>
+                            <tr class="text-center">
+                                <th>SI.No</th>
+                                <th>Book Name</th>
+                                <th>Published year</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            {% for x in range(data["books_data"]|length): %}
+                            <tr>
+                                <td>{{x+1}})</td>
+                                <td>{{data["books_data"][x][1]}}</td>
+                                <td>{{data["books_data"][x][2]}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Assign Book</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{url_for('assign_book')}}" method="POST">
+                        <input type="text" value='{{data["student_data"][0][0]}}' name="stu_id" hidden>
+                        <select name="assign_book" class="custom-select mb-3" required>
+                            <option value=""> - - Assign Book - - </option>
+                            {% for x in range(data["books_data"]|length): %}
+                            <option value='{{data["books_data"][x][0]}}'>{{data["books_data"][x][1]}}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-group">
+                            <label for="tod_date">Date Assigned</label>
+                            <input type="date" value="{{data['assign_date']}}" class="form-control" name="tod_date">
+                        </div>
+                        <button type="submit" class="btn-block btn btn-success">Assign Book</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>
+{% else %}
+<div class="container mx-auto m-5 p-5">
+    <h4>
+        <p>{{data['msg']}}.<br>You will be redirected to the Home page in few seconds.</p>
+    </h4>
+</div>
+<div class="modal fade" id="redirect" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>{{data['msg']}}.<br>You will be redirected to the Home page in few seconds.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#redirect").modal();
+    });
+    setTimeout(function () { window.location.href = "{{url_for('index')}}"; }, 2500);
+</script>
+{% endif %}
+{% endblock %}

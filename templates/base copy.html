@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+   <title>{{data['title']}}</title>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -17,68 +18,41 @@
    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
       integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
       crossorigin=""></script>
-   <meta name="description" content="" />
-   <meta name="author" content="" />
-   <title>{{data['title']}}</title>
-   <!-- Favicon-->
-   <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/favicon.ico')}}" />
-   <!-- Core theme CSS (includes Bootstrap)-->
-   <link href="{{url_for('static', filename='css/styles.css')}}" rel="stylesheet" />
-   <style>
-      .list-group-item-light,
-      .bg-ourcolor {
-         --bs-bg-opacity: 1;
-         background-color: #D43B1A !important;
-         color: white;
-      }
-   </style>
 </head>
 
-<body class="">
-   <div class="d-flex" id="wrapper">
-      <!-- Sidebar-->
-      <div class="border-end bg-ourcolor" id="sidebar-wrapper">
-         <!-- <div class="sidebar-heading border-bottom bg-light">Bridgewater State University</div> -->
-         <div class="list-group text-white list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light" href="{{url_for('index')}}">Home</a>
-            {% if session["userid"] and session["role"]==0 %}
-            <a class="list-group-item list-group-item-action list-group-item-light"
-               href="{{url_for('dashboard')}}">Dashboard</a>
-               <a class="list-group-item list-group-item-action list-group-item-light"
-               href="{{url_for('assigned_books')}}">Assigned Books</a>
-            <a class="list-group-item list-group-item-action list-group-item-light"
-               href="{{url_for('logout')}}">Logout</a>
-            {% elif session["userid"] and session["role"]== 1 %}
-            <a class="list-group-item list-group-item-action list-group-item-light"
-               href="{{url_for('stu_dashboard')}}">Dashboard</a>
-            <a class="list-group-item list-group-item-action list-group-item-light"
-               href="{{url_for('logout')}}">Logout</a>
-            {% else %}
-            <a class="list-group-item list-group-item-action list-group-item-light" href="#!" data-backdrop="static"
-               data-toggle="modal" data-target="#loginmodal">Login</a>
-            {% endif %}
-            <a class="list-group-item list-group-item-action list-group-item-light"
-               href="{{url_for('contactus')}}">Contact us</a>
+<body id="page-top">
+   <!-- Navigation-->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top py-3" id="mainNav1">
+      <div class="container">
+         <a class="navbar-brand" href="/">
+            <h4>Bridgewater State University</h4>
+         </a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"><span
+               class="navbar-toggler-icon"></span></button>
+         <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto my-2 my-lg-0">
+               <li class="nav-item"><a class="nav-link " href="{{url_for('index')}}">Home</a></li>
+               {% if session["userid"] and session["role"]==0 %}
+               <li class="nav-item"><a class="nav-link " href="{{url_for('dashboard')}}">Dashboard</a></li>
+               <li class="nav-item"><a class="nav-link " href="{{url_for('logout')}}">Logout</a></li>
+               {% elif session["userid"] and session["role"]== 1 %}
+               <li class="nav-item"><a class="nav-link " href="{{url_for('stu_dashboard')}}">Dashboard</a></li>
+               <li class="nav-item"><a class="nav-link " href="{{url_for('logout')}}">Logout</a></li>
+               {% else %}
+               <li class="nav-item"><a class="nav-link " href="#!" data-backdrop="static" data-toggle="modal"
+                     data-target="#loginmodal">Login</a></li>
+               {% endif %}
+               <!--<li class="nav-item"><a class="nav-link" href="#!">About us</a></li>-->
+               <li class="nav-item"><a class="nav-link " href="{{url_for('contactus')}}">Contact us</a></li>
+            </ul>
          </div>
       </div>
-      <!-- Page content wrapper-->
-      <div id="page-content-wrapper">
-         <!-- Top navigation-->
-         <nav class="navbar navbar-expand-lg navbar-dark bg-ourcolor border-bottom">
-            <div class="container-fluid">
-               <!-- <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button> -->
-               <a href="#!"><span class="navbar-toggler-icon" id="sidebarToggle"></span></a>
-               <h4>Bridgewater State University</h4>
-            </div>
-         </nav>
-         <!-- Page content-->
-         <div class="container-fluid">
-            {% block content %}
-            {% endblock %}
-            </p>
-         </div>
-      </div>
-   </div>
+   </nav>
+   <br>
+   <!-- <div class="container pt-2 mt-2"> -->
+   {% block content %}
+   {% endblock %}
+   <!-- </div> -->
    <!-- The Modal -->
    <div class="modal fade" id="loginmodal">
       <div class="modal-dialog modal-dialog-centered">
@@ -124,10 +98,6 @@
          </div>
       </div>
    </div>
-   <!-- Bootstrap core JS-->
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-   <!-- Core theme JS-->
-   <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
 </body>
 
 </html>

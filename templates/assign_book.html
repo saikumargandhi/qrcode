@@ -2,27 +2,23 @@
 {% block content %}
 <div class="container mx-auto m-5 p-5">
     <h4>
-        <p>File Downloaded.<br>You will be redirected to the Home page in few seconds.</p>
+        <p>{{data['msg']}}.<br>You will be redirected to the Home page in few seconds.</p>
     </h4>
 </div>
-<div class="container mt-5 pt-5">
-    <a id="dl" href="{{data['filename']}}" download hidden>Download</a>
-</div>
-
 <div class="modal fade" id="redirect" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <p>File Downloaded.<br>You will be redirected to the Home page in few seconds.</p>
+                <p>{{data['msg']}}.<br>You will be redirected to the Home page in few seconds.</p>
             </div>
         </div>
     </div>
 </div>
 <script>
-    document.getElementById("dl").click();
+    console.log("{{session['target']}}");
     $(document).ready(function () {
         $("#redirect").modal();
     });
-    setTimeout(function () { window.location.href = "{{url_for('stu_dashboard')}}"; }, 2500);
+    setTimeout(function () { window.location.href = "{{url_for('dashboard')}}"; }, 2500);
 </script>
 {% endblock %}

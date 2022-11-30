@@ -1,28 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-
-<!--Home page , with a container of nav pill tabs of about matrix college and website info.-->
-<div class="container pt-4 mt-5 mb-2 mx-auto">
- <br><br><br>
-</div>
-<!--Nav container close-->
-<!--OSM Map-->
 <div class="container mt-2 pt-2 mb-4 pb-2">
-  <div id="mapid" style="height:350px;"></div>
+  <img class="img-responsive" src="{{url_for('static', filename='home_page.jpg')}}" alt="Chania" width="100%"
+    height="100%">
 </div>
-<!--Map Close-->
-<script>
-  var mymap = L.map('mapid').setView([41.988870194361375, -70.9661922116155], 14.5);
-  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidGVzdGZvcmt1Y2V0IiwiYSI6ImNranZxc3c1bTBhenUydmw3YnN4bWQ1Mm8ifQ.ylS8DA-7s2WQCDglp9TFRg', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v8',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1IjoidGVzdGZvcmt1Y2V0IiwiYSI6ImNranZxc3c1bTBhenUydmw3YnN4bWQ1Mm8ifQ.ylS8DA-7s2WQCDglp9TFRg'
-  }).addTo(mymap);
-  var marker = L.marker([41.988870194361375, -70.9661922116155]).addTo(mymap);
-  marker.bindPopup("<b>Bridgewater State University is Here</b>").openPopup();
-
-</script>
 {% endblock %}

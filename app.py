@@ -12,6 +12,7 @@ import qrcode
 from datetime import datetime
 import smtplib
 import ssl
+from datetime import date
 
 # setting up flask session
 global msg
@@ -173,7 +174,7 @@ def edit_student(action, student_id):
         con.close()
 
 
-# closing and deleting trip information that is already posted
+# validating qrcode from bonafide certificate
 @ app.route("/validate/<userid>/", methods=['GET'])
 def validate(userid):
     title = "Validating Student"
@@ -200,6 +201,77 @@ def validate(userid):
             "title": title,
             "msg": msg,
             "student_data": student_data
+        }
+        print(data)
+        return render_template(redirect_url, data=data)
+        con.close()
+
+
+# validating qrcode from idcard certificate
+@ app.route("/fetch_student/<userid>/<hashmail>", methods=['GET'])
+def fetch_student(userid, hashmail):
+    title = "Fetching Student Info"
+    student_data = []
+    msg = "Unable to Fetch Student Info, Params mismatch"
+    msg_code = ""
+    books_data = []
+    fdate = date.today().strftime('%Y-%m-%d')
+    redirect_url = "fetch_student.html"
+    try:
+        # get connected to database
+        with sqlite3.connect("database.db") as con:
+            cur = con.cursor()
+            # if action is close close the trip from database
+            cur.execute("select * from users where id=:who", {"who": userid})
+            student_data = cur.fetchall()
+            cur.execute("select * from books")
+            books_data = cur.fetchall()
+            if(student_data):
+                print(hashmail)
+                print(hashlib.sha256(student_data[0][2].encode()).hexdigest())
+                if(hashlib.sha256(student_data[0][2].encode()).hexdigest() == hashmail):
+                    message = """From:BSU Admin <help@qrproject.tech>
+To: me
+MIME-Version: 1.0
+Content-type: text/html
+Subject: Student Info Accessed by Admin
+
+Your ID Card QR Code has been used to access your Student Information by BSU Admin.<br><br>If you haven't provided your ID Card for scanning, please report it at Office.<br><br>Regards,<br><br>BSU Admin,<br><br>help@qrproject.tech
+"""
+                    # Create a secure SSL context
+                    context = ssl.create_default_context()
+                    # Try to log in to server and send email
+                    try:
+                        server = smtplib.SMTP(smtp_server, port)
+                        server.ehlo()  # Can be omitted
+                        # Secure the connection
+                        server.starttls(context=context)
+                        server.ehlo()  # Can be omitted
+                        server.login(sender_email, password)
+                        server.sendmail(
+                            sender_email, student_data[0][2], message)
+                    except Exception as e:
+                        # Print any error messages to stdout
+                        print(e)
+                    finally:
+                        server.quit()
+                    msg_code = "ok"
+            else:
+                msg_code = "no"
+            con.commit()
+    except:
+        con.rollback()
+        msg = "Unable to perform operation"
+        msg_code = "dberror"
+        # send the fetched info to the front end page
+    finally:
+        data = {
+            "title": title,
+            "msg": msg,
+            "msg_code": msg_code,
+            "student_data": student_data,
+            "books_data": books_data,
+            "assign_date": fdate
         }
         print(data)
         return render_template(redirect_url, data=data)
@@ -336,10 +408,31 @@ def login():
             return render_template("login.html", data=data)
             con.close()
 
+
 # flask routing method to dashboard page
 
 
-@app.route("/dashboard")
+@app.route("/assigned_books")
+def assigned_books():
+    title = "Assigned Books Page"
+    assigned_data = []
+    with sqlite3.connect("database.db") as con:
+        cur = con.cursor()
+        userid = session["userid"]
+        cur.execute("select * from assign_books inner join users on users.id=assign_books.stu_id inner join books on assign_books.assign_book_id=books.book_id")
+        assigned_data = cur.fetchall()
+    con.close()
+    data = {
+        'title': title,
+        'assigned_data': assigned_data
+    }
+    print(data)
+    return render_template("assigned_books.html", data=data)
+
+# flask routing method to dashboard page
+
+
+@ app.route("/dashboard")
 def dashboard():
     title = "Dashboard Page"
     data = {
@@ -351,7 +444,7 @@ def dashboard():
 # flask routing method to student dashboard page
 
 
-@app.route("/stu_dashboard")
+@ app.route("/stu_dashboard")
 def stu_dashboard():
     title = "Dashboard Page"
     data = {
@@ -360,8 +453,34 @@ def stu_dashboard():
     return render_template("stu_dashboard.html", data=data)
 
 
+# assign books to students
+@ app.route("/assign_book", methods=["POST"])
+def assign_book():
+    title = "Assigning Book"
+    data = {
+        'title': title,
+    }
+    try:
+        stu_id = request.form['stu_id']
+        tod_date = request.form['tod_date']
+        assign_book = request.form['assign_book']
+        with sqlite3.connect("database.db") as con:
+            cur = con.cursor()
+            cur.execute("insert into assign_books (stu_id,assign_book_id,assign_date) VALUES (?,?,?)",
+                        (stu_id, assign_book, tod_date))
+            con.commit()
+        con.close()
+        msg = "Book Assigned Successfully"
+    except Exception as e:
+        msg = e
+    data["msg"] = msg
+    print(data)
+    return render_template("assign_book.html", data=data)
+
 # update profile
-@app.route("/update_profile", methods=["POST"])
+
+
+@ app.route("/update_profile", methods=["POST"])
 def update_profile():
     title = "Updating Profile"
     data = {
@@ -388,7 +507,7 @@ def update_profile():
 # flask route to invoke profile page
 
 
-@app.route("/my_profile")
+@ app.route("/my_profile")
 def my_profile():
     title = "My Profile Page"
     data = {
@@ -410,7 +529,7 @@ def my_profile():
 # download id card
 
 
-@app.route("/download_id_card")
+@ app.route("/download_id_card")
 def download_id_card():
     title = "ID Card"
     data = {
@@ -424,8 +543,8 @@ def download_id_card():
         if(rows):
             if(rows[0][6] == 1):
                 path = "./static/idcards/"
-                qrcode.make('https://qrcode-flask.herokuapp.com/validate/' +
-                            str(userid)+"/").save(path + rows[0][1]+".png")
+                qrcode.make('https://qrcode-flask.herokuapp.com/fetch_student/' +
+                            str(userid)+"/"+hashlib.sha256(rows[0][2].encode()).hexdigest()).save(path + rows[0][1]+".png")
                 pdf = FPDF('P', 'mm', 'A4')
                 pdf.add_page()
                 pdf.image(path+"base_card.png", x=20, y=20, w=150, h=80)
@@ -434,7 +553,7 @@ def download_id_card():
                 pdf.ln(42)
                 pdf.cell(18)
                 pdf.cell(70)
-                pdf.cell(25, 5, rows[0][1]+"(ID: "+str(rows[0][0])+")", 0, 1)
+                pdf.cell(25, 5, rows[0][1]+" (ID: "+str(rows[0][0])+")", 0, 1)
 
                 pdf.ln(7)
                 pdf.cell(18)
@@ -458,7 +577,7 @@ def download_id_card():
     con.close()
 
 
-@app.route("/change_password", methods=["POST"])
+@ app.route("/change_password", methods=["POST"])
 def change_password():
     title = "Change Password"
     data = {
@@ -492,7 +611,7 @@ def change_password():
             con.close()
 
 
-@app.route("/download_bonafide_card")
+@ app.route("/download_bonafide_card")
 def download_bonafide_card():
     title = "ID Card"
     data = {
