@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-{% if(data["msg_code"]=="ok" and session["role"]==0) %}
+{% if((data["msg_code"]=="ok") and (session["role"]==2 or session["role"]==3)) %}
 <div class="container pt-3 mt-3">
     <div class="card">
         <div class="card-header text-center">
+            {% if(session["role"]==2) %}
             <h5>Student Information fetched from ID Card - QR Code</h5>
+            {% elif(session["role"]==3) %}
+            <h5>Gym Management System</h5>
+            {% endif %}
         </div>
         <div class="card-body">
             <table class="table table-borderless table-hover">
@@ -29,6 +33,14 @@
                         <td>Branch</td>
                         <td>{{data["student_data"][0][8]}}</td>
                     </tr>
+                    {% if(session["role"]==3) %}
+                    <tr>
+                        <td class="text-warning"><b>Gym Fee</b></td>
+                        <td class="text-success">
+                            <b>Paid</b>
+                        </td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
@@ -36,6 +48,7 @@
     <br>
 
     <div class="row">
+        {% if(session["role"]==2) %}
         <div class="col-sm pt-2">
             <div class="card">
                 <div class="card-header text-center">
@@ -85,8 +98,8 @@
                     </form>
                 </div>
             </div>
-
         </div>
+        {% endif %}
     </div>
 
 </div>

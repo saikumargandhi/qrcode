@@ -41,10 +41,13 @@
          <!-- <div class="sidebar-heading border-bottom bg-light">Bridgewater State University</div> -->
          <div class="list-group text-white list-group-flush">
             <a class="list-group-item list-group-item-action list-group-item-light" href="{{url_for('index')}}">Home</a>
-            {% if session["userid"] and session["role"]==0 %}
+            {% if session["userid"] and (session["role"]==0 or session["role"]==3) %}
             <a class="list-group-item list-group-item-action list-group-item-light"
                href="{{url_for('dashboard')}}">Dashboard</a>
-               <a class="list-group-item list-group-item-action list-group-item-light"
+            <a class="list-group-item list-group-item-action list-group-item-light"
+               href="{{url_for('logout')}}">Logout</a>
+            {% elif session["userid"] and session["role"]== 2 %}
+            <a class="list-group-item list-group-item-action list-group-item-light"
                href="{{url_for('assigned_books')}}">Assigned Books</a>
             <a class="list-group-item list-group-item-action list-group-item-light"
                href="{{url_for('logout')}}">Logout</a>

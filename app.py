@@ -61,6 +61,7 @@ def logout():
     }
     # logout msg is sent to html page and session are cleared
     session['userid'] = None
+    session['role'] = None
     return render_template("logout.html", data=data)
 
 # Change password
@@ -79,7 +80,7 @@ def student_records():
             cur = con.cursor()
             userid = session["userid"]
             cur.execute(
-                "select * from users where id!=:who", {"who": userid})
+                "select * from users where id!=:who and role=1", {"who": userid})
             rows = cur.fetchall()
             if(rows):
                 msg_code = 200
@@ -438,7 +439,6 @@ def dashboard():
     data = {
         'title': title,
     }
-
     return render_template("dashboard.html", data=data)
 
 # flask routing method to student dashboard page

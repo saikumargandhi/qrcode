@@ -14,12 +14,19 @@
         </div>
     </div>
 </div>
-{% if data['msg_code'] == 200 and session["role"] == 0 %}
+{% if data['msg_code'] == 200 and (session["role"] == 0 or session["role"] == 3) %}
 <script>
     $(document).ready(function () {
         $("#redirect").modal();
     });
     setTimeout(function () { window.location.href = "{{url_for('dashboard')}}"; }, 2500);
+</script>
+{% elif data['msg_code'] == 200 and session["role"] == 2 %}
+<script>
+    $(document).ready(function () {
+        $("#redirect").modal();
+    });
+    setTimeout(function () { window.location.href = "{{url_for('assigned_books')}}"; }, 2500);
 </script>
 {% elif data['msg_code'] == 200 and session["role"] == 1 %}
 <script>
